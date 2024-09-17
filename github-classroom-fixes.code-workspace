@@ -1,0 +1,47 @@
+{
+  "extensions": {
+    "recommendations": [
+      "EditorConfig.EditorConfig",
+      "esbenp.prettier-vscode"
+    ]
+  },
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "request": "launch",
+        "name": "Fix Collaborators",
+        "type": "node",
+        "program": "${workspaceFolder}/src/scripts/fix-collaborators.ts",
+        "cwd": "${workspaceFolder}",
+        "env": {},
+        // This may need to be set to an absolute path
+        "runtimeExecutable": "deno",
+        "runtimeArgs": [
+          "run",
+          "--unstable",
+          "--inspect-wait",
+          "--allow-all"
+        ],
+        "attachSimplePort": 9229
+      }
+    ],
+    "compounds": []
+  },
+  "settings": {
+    "deno.enable": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "editor.codeActionsOnSave": [
+      "source.fixAll"
+    ],
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+  }
+}
