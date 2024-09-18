@@ -3,7 +3,7 @@
  */
 
 // Imports
-import { components } from "npm:@octokit/openapi-types@22.2.0";
+import { components } from "@octokit/openapi-types";
 
 /**
  * GitHub repository permissions

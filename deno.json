@@ -1,0 +1,14 @@
+{
+  "tasks": {
+    "build": "./scripts/build.ts",
+    "clean": "rm -rf ./dist/"
+  },
+  "imports": {
+    "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.4",
+    "@octokit/openapi-types": "npm:@octokit/openapi-types@^22.2.0",
+    "@octokit/rest": "npm:@octokit/rest@^21.0.2",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.2",
+    "@std/fs": "jsr:@std/fs@^1.0.3",
+    "@std/path": "jsr:@std/path@^1.0.6"
+  }
+}

@@ -17,7 +17,7 @@
         "request": "launch",
         "name": "Fix Collaborators",
         "type": "node",
-        "program": "${workspaceFolder}/src/scripts/fix-collaborators.ts",
+        "program": "${workspaceFolder}/src/tools/fix-collaborators.ts",
         "cwd": "${workspaceFolder}",
         "env": {},
         // This may need to be set to an absolute path

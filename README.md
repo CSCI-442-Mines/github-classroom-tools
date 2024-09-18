@@ -4,7 +4,7 @@
 
 ### Setup
 
-1. Install [Deno](https://deno.land/)
+1. Download the [lastest pre-built binary](https://github.com/CSCI-442-Mines/github-classroom-fixes/releases/latest) (if running as an end user) or install [Deno](https://deno.land/) (if running as a developer)
 2. Ensure the [GitHub organization allows for Fine-Grained Personal Access Tokens](https://docs.github.com/en/organizations/managing-programmatic-access-to-your-organization/setting-a-personal-access-token-policy-for-your-organization)
 3. Create a [GitHub Fine-Grained Personal Access Token](https://github.com/settings/tokens?type=beta) for the organization
    - Token name: `GitHub Classroom Fix`
@@ -15,31 +15,27 @@
      - Administration: `Read and write`
      - Metadata: `Read-only`
    - Organization permissions (none)
-4. Create a `.env` file like the following:
 
-   ```ini
-   ORGANIZATION_NAME = "CSCI-442-Mines"
-   TOKEN = "github_pat_xyz"
+### Global Options
 
-   # Only required for fix-collaborators.ts
-   FIX_COLLABORATORS_REPOSITORY_USERNAME_PATTERN = "^f24-project-2-(.+)$"
-   FIX_COLLABORATORS_REPOSITORY_PERMISSION = "push"
-   ```
+| CLI Option            | Environment Variable | Description                               | Required |
+| --------------------- | -------------------- | ----------------------------------------- | -------- |
+| `--github-token`      | `GITHUB_TOKEN`       | GitHub Fine-Grained Personal Access Token | Yes      |
+| `--organization-name` | `ORGANIZATION_NAME`  | GitHub organization name                  | Yes      |
 
-### Global Variables
+5. Run the tool
+   - Pre-built binary: `./dist/<tool name>.<target platform triple>` (e.g.: `./dist/fix-collaborators.x86_64-unknown-linux-gnu`)
+   - With Deno: `deno run --allow-env --allow-net --allow-read src/tools/<tool name>.ts` (e.g.: `deno run --allow-env --allow-net src/tools/fix-collaborators.ts`)
 
-- `ORGANIZATION_NAME`: GitHub organization name
-- `TOKEN`: GitHub Fine-Grained Personal Access Token
+## Tools
 
-5. Run the script with Deno: `deno run --allow-env --allow-net src/scripts/<script name>` (e.g.: `deno run --allow-env --allow-net src/fix-collaborators.ts`)
+### `fix-collaborators`
 
-## Scripts
+This tool ensures that every student is a collaborator on their own repository. On September 17, 2024, [GitHub Classroom experienced a bug where students were not added as collaborators to their own repositories](https://github.com/orgs/community/discussions/138929). This tool fixes that issue.
 
-### `fix-collaborators.ts`
+### Tool-Specific Options
 
-This script ensures that every student is a collaborator on their own repository. In September 2024, GitHub Classroom experienced a bug where students were not added as collaborators to their own repositories. This script fixes that issue.
-
-### Variables
-
-- `FIX_COLLABORATORS_REPOSITORY_USERNAME_PATTERN`: repository username extraction pattern (This should be a JavaScript regular expression pattern with exactly one capturing group that captures the student username)
-- `FIX_COLLABORATORS_REPOSITORY_PERMISSION`: desired repository permission (This should be one of the following values: `pull`, `triage`, `push`, `maintain`, `admin`)
+| CLI Option                      | Environment Variable          | Description                                                                                                                                                         | Required |
+| ------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `--repository-username-pattern` | `REPOSITORY_USERNAME_PATTERN` | Repository username extraction pattern (This should be a JavaScript regular expression pattern with exactly one capturing group that captures the student username) | Yes      |
+| `--repository-permission`       | `REPOSITORY_PERMISSION`       | Desired repository permission (This should be one of the following values: `pull`, `triage`, `push`, `maintain`, `admin`)                                           | Yes      |

@@ -3,8 +3,8 @@
  */
 
 // Imports
-import { Octokit } from "npm:@octokit/rest@21.0.2";
-import { components } from "npm:@octokit/openapi-types@22.2.0";
+import { Octokit } from "@octokit/rest";
+import { components } from "@octokit/openapi-types";
 import {
   RepositoryCollaboratorPermission,
   RepositoryCollaboratorPermissionValues,
@@ -65,6 +65,11 @@ export const getOrganizationRepositories = async (
       page: page++,
     });
 
+    // Log
+    console.debug(
+      `Fetched ${response.data.length} repositories... (${repositories.length} total)`
+    );
+
     if (response.data.length === 0) {
       break;
     }
@@ -106,6 +111,11 @@ export const getRepositoryCollaborators = async (
         per_page: PAGE_SIZE,
         page: page++,
       }
+    );
+
+    // Log
+    console.debug(
+      `Fetched ${response.data.length} collaborators... (${collaborators.length} total)`
     );
 
     if (response.data.length === 0) {
