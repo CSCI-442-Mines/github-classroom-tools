@@ -1,5 +1,7 @@
 # GitHub Classroom Fixes
 
+[![Release Status](https://img.shields.io/github/actions/workflow/status/CSCI-442-Mines/github-classroom-fixes/release.yml?label=Release&style=flat-square)](https://github.com/CSCI-442-Mines/github-classroom-fixes/actions/workflows/release.yml)
+
 ## Documentation
 
 ### Setup
