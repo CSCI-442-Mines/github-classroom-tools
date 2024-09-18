@@ -26,11 +26,8 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Install dependencies
-        run: deno cache --lock=lock.json
-
       - name: Build everything
-        run: deno task build --target all
+        run: deno task build --targets all
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
