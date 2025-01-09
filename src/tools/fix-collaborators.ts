@@ -9,44 +9,47 @@ import { Octokit } from "@octokit/rest";
 import {
   RepositoryCollaboratorPermission,
   RepositoryCollaboratorPermissionValues,
-} from "../lib/types.ts";
+} from "../lib/octokit-types.ts";
 import {
   checkRepositoryCollaboratorPermission,
   getOrganizationRepositories,
   getRepositoryCollaborators,
-} from "../lib/utils.ts";
+} from "../lib/octokit-utils.ts";
 
 await new Command()
   .name("fix-collaborators")
   .description("Tool to fix GitHub Classroom collaborators")
   .type("permission", new EnumType(RepositoryCollaboratorPermissionValues))
   .env("GITHUB_TOKEN=<token:string>", "GitHub token")
-  .env("ORGANIZATION_NAME=<name:string>", "GitHub organization name")
+  .env("GITHUB_ORGANIZATION_NAME=<name:string>", "GitHub organization name")
   .env(
-    "REPOSITORY_USERNAME_PATTERN=<pattern:string>",
+    "GITHUB_REPOSITORY_USERNAME_PATTERN=<pattern:string>",
     "Repository username extraction pattern"
   )
   .env(
-    "REPOSITORY_PERMISSION=<permission:permission>",
+    "GITHUB_REPOSITORY_PERMISSION=<permission:permission>",
     "Desired repository permission"
   )
   .option("--github-token <token:string>", "GitHub token")
-  .option("--organization-name <name:string>", "GitHub organization name")
   .option(
-    "--repository-username-pattern <pattern:string>",
-    "Repository username extraction pattern"
+    "--github-organization-name <name:string>",
+    "GitHub organization name"
   )
   .option(
-    "--repository-permission <permission:permission>",
-    "Desired repository permission"
+    "--github-repository-username-pattern <pattern:string>",
+    "GitHub repository username extraction pattern"
+  )
+  .option(
+    "--github-repository-permission <permission:permission>",
+    "GitHub desired repository permission"
   )
   .action(async function (rawArgs) {
     // Parse and validate the options
     for (const [key, value] of Object.entries({
       githubToken: rawArgs.githubToken,
-      organizationName: rawArgs.organizationName,
-      repositoryUsernamePattern: rawArgs.repositoryUsernamePattern,
-      repositoryPermission: rawArgs.repositoryPermission,
+      githubOrganizationName: rawArgs.githubOrganizationName,
+      githubRepositoryUsernamePattern: rawArgs.githubRepositoryUsernamePattern,
+      githubRepositoryPermission: rawArgs.githubRepositoryPermission,
     })) {
       if (value === undefined) {
         console.error(`Missing required option: ${key}`);
@@ -57,13 +60,13 @@ await new Command()
 
     const {
       githubToken,
-      organizationName,
-      repositoryUsernamePattern,
-      repositoryPermission,
+      githubOrganizationName,
+      githubRepositoryUsernamePattern,
+      githubRepositoryPermission,
     } = rawArgs as Required<typeof rawArgs>;
 
     const compiledRepositoryUsernamePattern = new RegExp(
-      repositoryUsernamePattern!
+      githubRepositoryUsernamePattern!
     );
 
     // Initialize Octokit
@@ -73,7 +76,7 @@ await new Command()
 
     // Get all repositories in the organization
     const repositories = await getOrganizationRepositories(
-      organizationName,
+      githubOrganizationName,
       octokit
     );
 
@@ -85,7 +88,7 @@ await new Command()
       if (matches === null || matches.length !== 2) {
         // Log
         console.debug(
-          `Skipping repository ${repository.full_name} (no match)...`
+          `Skipping repository ${repository.full_name} (No match)...`
         );
 
         continue;
@@ -95,7 +98,7 @@ await new Command()
 
       // Get collaborators
       const collaborators = await getRepositoryCollaborators(
-        organizationName,
+        githubOrganizationName,
         repository.name,
         octokit
       );
@@ -110,12 +113,12 @@ await new Command()
         collaborator !== undefined &&
         checkRepositoryCollaboratorPermission(
           collaborator.permissions,
-          repositoryPermission as RepositoryCollaboratorPermission
+          githubRepositoryPermission as RepositoryCollaboratorPermission
         )
       ) {
         // Log
         console.debug(
-          `Skipping repository ${repository.full_name} (user ${username} already has the desired permission ${repositoryPermission})...`
+          `Skipping repository ${repository.full_name} (User ${username} already has the desired permission ${githubRepositoryPermission})...`
         );
 
         continue;
@@ -125,10 +128,10 @@ await new Command()
       await octokit.request(
         "PUT /repos/{owner}/{repo}/collaborators/{username}",
         {
-          owner: organizationName,
+          owner: githubOrganizationName,
           repo: repository.name,
           username,
-          permission: repositoryPermission,
+          permission: githubRepositoryPermission,
         }
       );
 

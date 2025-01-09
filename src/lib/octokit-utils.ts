@@ -1,5 +1,5 @@
 /**
- * @file Utilities
+ * @file OctoKit utilities
  */
 
 // Imports
@@ -8,7 +8,7 @@ import { components } from "@octokit/openapi-types";
 import {
   RepositoryCollaboratorPermission,
   RepositoryCollaboratorPermissionValues,
-} from "./types.ts";
+} from "./octokit-types.ts";
 
 /**
  * Pagination size

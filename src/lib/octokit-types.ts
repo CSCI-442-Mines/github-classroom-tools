@@ -1,5 +1,5 @@
 /**
- * @file Types
+ * @file OctoKit Types
  */
 
 // Imports
